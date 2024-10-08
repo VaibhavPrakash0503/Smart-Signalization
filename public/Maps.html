@@ -153,41 +153,69 @@
         }
             
         // Function to continuously send marker values
-        function startSendingMarkerValues() {
-            let markerIndex =0;
-            const intervalId = setInterval(() => {
-                if (markerIndex < nearbyMarkers.length) {
-                    const marker = nearbyMarkers[markerIndex];
-                    const markerValue = parseInt(marker.getTitle().substring(7));
-                    console.log(`Sending Marker Value: ${markerValue}`);
+        // function startSendingMarkerValues() {
+        //     let markerIndex =0;
+        //     const intervalId = setInterval(() => {
+        //         if (markerIndex < nearbyMarkers.length) {
+        //             const marker = nearbyMarkers[markerIndex];
+        //             const markerValue = parseInt(marker.getTitle().substring(7));
+        //             console.log(`Sending Marker Value: ${markerValue}`);
                     
-                    // Send the value to the ESP32
-                    sendLaneValue(markerValue);
+        //             // Send the value to the ESP32
+        //             sendLaneValue(markerValue);
 
-                    // Increment to move to the next marker in the next interval
-                    markerIndex++;
-                } 
-                else {
-                    // Stop the interval once all markers have been sent
-                    clearInterval(intervalId);
-                    console.log("All marker values have been sent.");
-                    // Stop displaying the route on the map
-                    window.alert('Route completed');
-                    window.location.reload();
+        //             // Increment to move to the next marker in the next interval
+        //             markerIndex++;
+        //         } 
+        //         else {
+        //             // Stop the interval once all markers have been sent
+        //             clearInterval(intervalId);
+        //             console.log("All marker values have been sent.");
+        //             // Stop displaying the route on the map
+        //             window.alert('Route completed');
+        //             window.location.reload();
+        //         }
+        //     }, 5000); // Sends marker values every 5 seconds
+        // }
+
+
+        async function startSendingMarkerValues() {
+                let markerIndex = 0;
+
+            // Loop through the markers
+            while (markerIndex < nearbyMarkers.length) {
+                const marker = nearbyMarkers[markerIndex]; 
+                const markerValue = parseInt(marker.getTitle().substring(7));
+                console.log(`Sending Marker Value: ${markerValue}`);
+                
+                try {
+                    // Send the value to the ESP32 and wait for it to complete
+                    await sendLaneValue(markerValue);
+                    console.log(`Traffic light updated for lane ${markerValue}`);
+                } catch (error) {
+                    console.error('Error sending marker value:', error);
                 }
-            }, 5000); // Sends marker values every 5 seconds
+                
+                // Increment to move to the next marker
+                markerIndex++;
+            }
+
+            console.log("All marker values have been sent.");
+            // Stop displaying the route on the map
+            window.alert('Route completed');
+            window.location.reload();
         }
 
         // Function to map lane values to ESP32 IPs and send values
-        function sendLaneValue(lane) {
-            //Define the mapping of lane values to ESP32 IP addresses
+        async function sendLaneValue(lane) {
+            // Define the mapping of lane values to ESP32 IP addresses
             const esp32Mapping = {
-                1: '192.168.137.69', 
-                2: '192.168.137.69',
-                3: '192.168.137.69',
-                4: '192.168.137.69',
-                5: '192.168.137.69',
-                6: '192.168.137.69',
+                1: '192.168.137.183', 
+                2: '192.168.137.183',
+                3: '192.168.137.183',
+                4: '0',
+                5: '0',
+                6: '0',
                 // Add more mappings as needed
             };
 
@@ -197,17 +225,25 @@
             if (esp32IP) {
                 const url = `http://${esp32IP}/set_lights?lane=${lane}`;
 
-                // Send HTTP GET request
-                fetch(url)
-                    .then(response => response.text())
+                // Send HTTP GET request and return a Promise
+                return fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.text();
+                    })
                     .then(data => {
-                        console.log(`Response from ESP32 ${esp32IP}:`, data);
+                        console.log(`Response from ESP32 :`, data);
+                        return data; // Resolve with response data
                     })
                     .catch(error => {
-                        console.error('Error sending signal:', error);
+                        //console.error('Error sending signal:', error);
+                        throw error; // Propagate the error
                     });
             } else {
                 console.error('No ESP32 mapping found for lane:', lane);
+                throw new Error(`No mapping for lane: ${lane}`);
             }
         }
         
@@ -286,6 +322,8 @@
         <input id="end" type="text" placeholder="Enter destination">
         <button id="sub" type="submit" style="height: 30px; border-radius: 30px; border-color: rgba(0,0,0,0.67);">Get Route</button>
     </form>
-    <div id="map" style="height: 850px; width: 100%;"></div>
+    <div id="map" style="height: 642px; width: 100%;"></div>
 </body>
 </html>
+
+

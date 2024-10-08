@@ -1,0 +1,9 @@
+#ignoring node modules
+node_modules/
+
+#ignoring test files
+public/test2.html
+public/te.html
+public/test.html
+script.js
+
