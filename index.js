@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({
     extended:true
 }))
 
+
 mongoose.connect('mongodb://localhost:27017/TrafficLight')
 var db = mongoose.connection
 db.on('error',()=> console.log("Error in Connecting to Database"))
