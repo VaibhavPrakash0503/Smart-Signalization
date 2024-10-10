@@ -2,6 +2,8 @@ var express = require("express")
 var bodyParser = require("body-parser")
 var mongoose = require("mongoose")
 
+require('dotenv').config(); 
+
 const app=express()
 
 app.use(bodyParser.json())
@@ -50,6 +52,11 @@ app.post("/login", (req, res) => {
         }
         return res.redirect('Maps.html'); // Create this page to show after successful login
     });
+});
+
+// Endpoint to send the API key to the frontend
+app.get("/get-maps-api-key", (req, res) => {
+    res.json({ apiKey: process.env.API_KEY });
 });
 
 app.get("/",(req,res) => {

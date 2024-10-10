@@ -3,11 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script async defer src ="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7bzgLrMKMMzKdsdyzix9xUQ9XXPUS3X4&libraries=places"></script>
     <script>
+        // Function to load the Google Maps script dynamically
+        function loadGoogleMaps(apiKey) {
+            console.log(apiKey);
+            const script = document.createElement('script');
+            script.src = apiKey;
+            script.async = true;
+            script.defer = true;
+            script.onload = initMap; // Initialize the map once the script is loaded
+            document.head.appendChild(script);
+        }
+
+        // Function to fetch the Google Maps API key from the backend
+        async function fetchGoogleMapsApiKey() {
+            try {
+                const response = await fetch('/get-maps-api-key');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch Google Maps API key');
+                }
+                const data = await response.json();
+                return data.apiKey; // Assuming your backend returns { "apiKey": "YOUR_API_KEY" }
+            } catch (error) {
+                console.error('Error fetching Google Maps API key:', error);
+            }
+        }
+
+        // Fetch the API key and load the map
+        async function initialize() {
+            const apiKey = await fetchGoogleMapsApiKey();
+            console.log(apiKey);
+            if (apiKey) {
+                loadGoogleMaps(apiKey);
+            } else {
+                alert('Failed to load Google Maps. Please try again.');
+            }
+        }
+
         let markers = []; // Array to store marker references
         let nearbyMarkers = []; //Array to store markers near route
         let  directionsService, directionsRenderer;
+
         function initMap() {
             const mapCenter = { lat: 16.49495164522174, lng: 80.49914285090084 };
 
@@ -151,33 +187,6 @@
             });
             startSendingMarkerValues();
         }
-            
-        // Function to continuously send marker values
-        // function startSendingMarkerValues() {
-        //     let markerIndex =0;
-        //     const intervalId = setInterval(() => {
-        //         if (markerIndex < nearbyMarkers.length) {
-        //             const marker = nearbyMarkers[markerIndex];
-        //             const markerValue = parseInt(marker.getTitle().substring(7));
-        //             console.log(`Sending Marker Value: ${markerValue}`);
-                    
-        //             // Send the value to the ESP32
-        //             sendLaneValue(markerValue);
-
-        //             // Increment to move to the next marker in the next interval
-        //             markerIndex++;
-        //         } 
-        //         else {
-        //             // Stop the interval once all markers have been sent
-        //             clearInterval(intervalId);
-        //             console.log("All marker values have been sent.");
-        //             // Stop displaying the route on the map
-        //             window.alert('Route completed');
-        //             window.location.reload();
-        //         }
-        //     }, 5000); // Sends marker values every 5 seconds
-        // }
-
 
         async function startSendingMarkerValues() {
                 let markerIndex = 0;
@@ -253,9 +262,8 @@
         }
 
         // Initialize the map when the page loads
-        window.onload = () => {
-            initMap();
-        };
+        window.onload = initialize; // Call the initialize function instead
+
     </script>
     <style>
         body {
@@ -322,7 +330,7 @@
         <input id="end" type="text" placeholder="Enter destination">
         <button id="sub" type="submit" style="height: 30px; border-radius: 30px; border-color: rgba(0,0,0,0.67);">Get Route</button>
     </form>
-    <div id="map" style="height: 642px; width: 100%;"></div>
+    <div id="map" style="height: 920px; width: 100%;"></div>
 </body>
 </html>
 
