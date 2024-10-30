@@ -7,9 +7,9 @@
         // Function to load the Google Maps script dynamically
         function loadGoogleMaps(apiKey) {
             const script = document.createElement('script');
-            script.src = apiKey;
             script.async = true;
             script.defer = true;
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
             script.onload = initMap; // Initialize the map once the script is loaded
             document.head.appendChild(script);
         }
@@ -28,7 +28,6 @@
             }
         }
 
-        // Fetch the API key and load the map
         async function initialize() {
             const apiKey = await fetchGoogleMapsApiKey();
             if (apiKey) {
@@ -80,29 +79,24 @@
                 origin: new google.maps.Point(0, 0), // Origin of the image (top-left corner)
                 anchor: new google.maps.Point(10, 10), // Anchor (where the marker points)
             };
-
-            // Array containing data for multiple markers
-            const markerData = [
-                { lat: 16.495479996036146, lng: 80.49904188864451}, // Marker 1 16.495479996036146, 80.49904188864451
-                { lat: 16.495588585360405, lng: 80.49919823460043 }, // Marker 2 16.495588585360405, 80.49919823460043
-                { lat: 16.49547799734693, lng: 80.49929077081237 }, // Marker 3 16.49547799734693, 80.49929077081237
-                { lat: 16.494887191750784, lng: 80.50002156551199 }, // Marker 4 16.494887191750784, 80.50002156551199
-                { lat: 16.49487561854721, lng: 80.50008727963325 },  // Marker 5 16.49487561854721, 80.50008727963325
-                { lat: 16.49413743410036, lng: 80.49852567068721 }   // Marker 6 16.49413743410036, 80.49852567068721
-            ];
-
-            // Loop through the markerData array to create markers
-            markerData.forEach((data, index) => {
-                const marker = new google.maps.Marker({
-                    position: { lat: data.lat, lng: data.lng },
-                    map: map,
-                    icon: trafficLightIcon, 
-                    title: `Marker ${index + 1}`,  // e.g., "Marker 1", "Marker 2", etc.
+            
+            fetch('/markers')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    data.forEach((markerdata,index) => {
+                        const marker = new google.maps.Marker({
+                            position: { lat: markerdata.lat, lng: markerdata.lng },
+                            map: map,
+                            icon:trafficLightIcon,
+                            title: `Marker ${index + 1}`
+                        });
+                        markers.push(marker);
+                    });
+                })
+                .catch(err => {
+                    console.error('Error fetching marker data:', err);
                 });
-
-                // Store the marker in the array
-                markers.push(marker);
-            });
 
             // Initialize Directions Service and Renderer
             directionsService = new google.maps.DirectionsService();

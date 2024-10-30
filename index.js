@@ -54,6 +54,17 @@ app.post("/login", (req, res) => {
     });
 });
 
+app.get('/markers', async (req, res) => {
+    try {
+        // Fetch all markers from the collection
+        const markers = await db.collection('Markers').find({}).toArray();
+        res.json(markers); // Send the markers data as JSON response
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving markers');
+    }
+});
+
 // Endpoint to send the API key to the frontend
 app.get("/get-maps-api-key", (req, res) => {
     res.json({ apiKey: process.env.API_KEY });
