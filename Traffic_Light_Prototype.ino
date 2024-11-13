@@ -1,6 +1,6 @@
 #include <WiFi.h>
-const char* ssid = "Vaibhav's PC";
-const char* password = "Vaibhav05";
+const char* ssid = "<Network ID>";
+const char* password = "<Paswword>";
 
 // Define GPIO pins for each lane (red, green, yellow)
 const int laneLights[3][3] = {
