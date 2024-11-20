@@ -4,96 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1-crypto-js.min.js"></script>
     <style>
         /* General Styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            background-color: #1f2833;
+            color: #c5c6c7;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            position: relative; /* For positioning the particle background */
-            background-color: #1b1b1b; /* Dark background to enhance particle visibility */
-            color: #ffffff; /* White text for better contrast */
         }
 
-        /* Container Styles */
-        .container {
-            background-color: rgba(33, 33, 33, 0.8); /* Darker and more transparent container */
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            border-radius: 8px;
-            width: 320px;
-            position: relative; /* Ensure this is on top of the particles */
-            z-index: 1; /* Place it above the particles */
-            opacity: 0; /* Start at 0 opacity for animation */
-            transform: translateY(-20px);
-            animation: fadeInUp 0.5s forwards ease-in-out; /* Fade in animation */
-        }
-
-        .container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #ffffff; /* White text for contrast */
-        }
-
-        input[type="email"],
-        input[type="password"] {
-            width: 90%;
-            padding: 10px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            transition: border 0.3s; /* Transition for border */
-            background-color: rgba(255, 255, 255, 0.7); /* Slightly more opaque for inputs */
-        }
-
-        input[type="email"]:focus,
-        input[type="password"]:focus {
-            border-color: #00c853; /* Bright green focus for a nuclear vibe */
-            outline: none; /* Remove default outline */
-        }
-
-        input[type="submit"] {
+        /* Particle Styles */
+        #particles-js {
+            position: absolute;
             width: 100%;
-            padding: 10px;
-            background-color: #00e676; /* Neon green button */
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s; /* Transition for button */
+            height: 100%;
+            z-index: 0;
+            top: 0;
+            left: 0;
         }
 
-        input[type="submit"]:hover {
-            background-color: #00b248; /* Darker green on hover */
-            transform: scale(1.05); /* Scale effect on hover */
-        }
-
-        .register-link {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .register-link a {
-            color: #00e676; /* Link color matches button */
-            text-decoration: none;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-
-        #error-message {
-            color: #ff5252;
-            margin-top: 20px;
-            text-align: center; /* Center align error message */
-        }
-
-        /* Fade-in and Slide-up Animation */
+        /* Animation for Containers */
         @keyframes fadeInUp {
             0% {
                 opacity: 0;
@@ -105,22 +43,111 @@
             }
         }
 
-        /* Particle Styles */
-        #particles-js {
-            position: absolute;
+        /* Container Styles */
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(35, 40, 45, 0.8);
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            width: 320px;
+            max-width: 90%;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInUp 0.5s forwards ease-in-out;
+            text-align: center;
+        }
+
+        h2 {
+            color: #66fcf1;
+            margin: 0 0 20px;
+        }
+
+        input[type="email"], input[type="password"] {
+            width: 90%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #666666;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #c5c6c7;
+        }
+
+        input[type="submit"] {
             width: 100%;
-            height: 100%;
-            z-index: 0; /* Behind the container */
-            top: 0;
-            left: 0;
+            padding: 10px;
+            background-color: #45a29e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #1f787a;
+            transform: scale(1.05);
+        }
+
+        /* Navigation Bar Styles */
+        .navbar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 2;
+        }
+
+        .navbar a {
+            color: #66fcf1;
+            text-decoration: none;
+            margin-left: 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+
+        .register-link, .forgot-password-link, .login-link {
+            margin-top: 10px;
+        }
+
+        .register-link a, .forgot-password-link a, .login-link a {
+            color: #66fcf1;
+            text-decoration: none;
+        }
+
+        .register-link a:hover, .forgot-password-link a:hover, .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        #error-message {
+            color: #ff5252;
+            margin-top: 20px;
+            text-align: center;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </head>
 <body>
-    <div id="particles-js"></div> <!-- Container for the particle animation -->
+    <div id="particles-js"></div>
 
-    <div class="container">
+    <div class="navbar">
+        <a href="home.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="login.html">Sign In</a>
+        <a href="register.html">Sign Up</a>
+    </div>
+
+    <!-- Login Form -->
+    <div id="login" class="container">
         <h2>Login</h2>
         <form action="/login" method="post">
             <label for="email">Email:</label>
@@ -132,42 +159,57 @@
             <input type="submit" value="Login">
         </form>
         <div id="error-message">
-            <!-- Check for query parameter in JavaScript -->
             <script>
                 const urlParams = new URLSearchParams(window.location.search);
                 const error = urlParams.get('error');
                 if (error) {
-                    document.write(error); // Display the error message
+                    document.write(error);
                 }
             </script>
         </div>
         <div class="register-link">
             <p>Don't have an account? <a href="register.html">Register here</a></p>
         </div>
+        <div class="forgot-password-link">
+            <p><a href="#forgot-password">Forgot Password?</a></p>
+        </div>
+    </div>
+
+    <!-- Forgot Password Section -->
+    <div id="forgot-password" class="container" style="display: none;">
+        <h2>Forgot Password</h2>
+        <p>Please enter your email address to receive password reset instructions.</p>
+        <form action="/reset-password" method="post">
+            <label for="reset-email">Email:</label>
+            <input type="email" id="reset-email" name="reset-email" required>
+
+            <input type="submit" value="Send Reset Instructions">
+        </form>
+        <div id="error-message"></div>
+        <div class="login-link">
+            <p>Remembered your password? <a href="#login">Login here</a></p>
+        </div>
     </div>
 
     <script>
-        /* Initialize particles.js with nuclear collision-like effect */
+        /* Initialize particles.js with blue and gray bubbles, no lines */
         particlesJS("particles-js", {
             particles: {
                 number: {
-                    value: 80,
+                    value: 70,
                     density: {
                         enable: true,
                         value_area: 800
                     }
                 },
                 color: {
-                    value: ["#00e676", "#00c853", "#ff5252"] // Bright green and red for contrast
+                    value: ["#00aaff", "#c0c0c0"]
                 },
                 shape: {
                     type: "circle",
                     stroke: {
-                        width: 2,
-                        color: "#00c853" // Green stroke to enhance the nuclear theme
-                    },
-                    polygon: {
-                        nb_sides: 6
+                        width: 0,
+                        color: "#ffffff"
                     }
                 },
                 opacity: {
@@ -176,7 +218,7 @@
                     anim: {
                         enable: true,
                         speed: 1,
-                        opacity_min: 0.1,
+                        opacity_min: 0.2,
                         sync: false
                     }
                 },
@@ -185,21 +227,17 @@
                     random: true,
                     anim: {
                         enable: true,
-                        speed: 5,
-                        size_min: 0.1,
+                        speed: 3,
+                        size_min: 0.5,
                         sync: false
                     }
                 },
                 line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: "#ffffff",
-                    opacity: 0.4,
-                    width: 1
+                    enable: false
                 },
                 move: {
                     enable: true,
-                    speed: 3,
+                    speed: 2,
                     direction: "none",
                     random: true,
                     straight: false,
@@ -217,41 +255,45 @@
                 events: {
                     onhover: {
                         enable: true,
-                        mode: "repulse" // Particles push away on hover
+                        mode: "bubble"
                     },
                     onclick: {
                         enable: true,
-                        mode: "push" // Additional particles on click
+                        mode: "repulse"
                     },
                     resize: true
                 },
                 modes: {
-                    grab: {
-                        distance: 200,
-                        line_linked: {
-                            opacity: 1
-                        }
-                    },
                     bubble: {
-                        distance: 400,
-                        size: 40,
-                        duration: 2,
-                        opacity: 8,
+                        distance: 200,
+                        size: 8,
+                        duration: 1,
+                        opacity: 0.8,
                         speed: 3
                     },
                     repulse: {
                         distance: 200,
                         duration: 0.4
-                    },
-                    push: {
-                        particles_nb: 4
-                    },
-                    remove: {
-                        particles_nb: 2
                     }
                 }
             },
             retina_detect: true
+        });
+
+        // JavaScript for showing/hiding the forms
+        const loginSection = document.getElementById("login");
+        const forgotPasswordSection = document.getElementById("forgot-password");
+
+        document.querySelector(".forgot-password-link a").addEventListener("click", function(e) {
+            e.preventDefault();
+            loginSection.style.display = "none";
+            forgotPasswordSection.style.display = "flex";
+        });
+
+        document.querySelector(".login-link a").addEventListener("click", function(e) {
+            e.preventDefault();
+            forgotPasswordSection.style.display = "none";
+            loginSection.style.display = "flex";
         });
     </script>
 </body>

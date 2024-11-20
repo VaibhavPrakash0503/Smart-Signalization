@@ -39,7 +39,7 @@
 
         let markers = []; // Array to store marker references
         let nearbyMarkers = []; //Array to store markers near route
-        let  directionsService, directionsRenderer;
+        let directionsService, directionsRenderer;
 
         function initMap() {
             const mapCenter = { lat: 16.49495164522174, lng: 80.49914285090084 };
@@ -211,12 +211,12 @@
         async function sendLaneValue(lane) {
             // Define the mapping of lane values to ESP32 IP addresses
             const esp32Mapping = {
-                1: '192.168.137.183', 
-                2: '192.168.137.183',
-                3: '192.168.137.183',
-                4: '0',
-                5: '0',
-                6: '0',
+                1: '192.168.137.156', 
+                2: '192.168.137.156',
+                3: '192.168.137.156',
+                4: '192.168.137.221',
+                5: '192.168.137.221',
+                6: '192.168.137.221',
                 // Add more mappings as needed
             };
 
@@ -224,6 +224,11 @@
             const esp32IP = esp32Mapping[lane];
 
             if (esp32IP) {
+                if(lane > 3)
+                {
+                    lane = lane-3;
+                }
+                    
                 const url = `http://${esp32IP}/set_lights?lane=${lane}`;
 
                 // Send HTTP GET request and return a Promise
@@ -322,7 +327,7 @@
         <input id="end" type="text" placeholder="Enter destination">
         <button id="sub" type="submit" style="height: 30px; border-radius: 30px; border-color: rgba(0,0,0,0.67);">Get Route</button>
     </form>
-    <div id="map" style="height: 920px; width: 100%;"></div>
+    <div id="map" style="height: 675px; width: 100%;"></div>
 </body>
 </html>
 

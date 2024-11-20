@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
     <title>Home</title>
     <style>
         /* General Styles */
@@ -13,49 +14,11 @@
             height: 100vh;
             overflow: hidden;
             position: relative;
-            background-color: #1f2833; /* Dark background */
-            color: #c5c6c7; /* Light gray text */
-        }
-
-        /* Container Styles */
-        .container {
+            background-color: #1f2833;
+            color: #c5c6c7;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100%; /* Full height to center content */
-            position: relative;
-            z-index: 1;
-            opacity: 0;
-            transform: translateY(-20px);
-            animation: fadeInUp 0.5s forwards ease-in-out;
-            text-align: center; /* Center the text */
-        }
-
-        h1 {
-            font-size: 3em; /* Large and bold welcome text */
-            font-weight: bold;
-            color: #66fcf1; /* Light blue heading */
-            margin: 0;
-        }
-
-        p {
-            margin-top: 10px;
-            color: #c5c6c7; /* Light gray text */
-            max-width: 600px; /* Max width for paragraph */
-        }
-
-        .signin-signup {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 2; /* Above particles */
-        }
-
-        .signin-signup a {
-            color: #c5c6c7; /* Light gray links */
-            text-decoration: none;
-            margin-left: 15px;
         }
 
         /* Particle Styles */
@@ -63,12 +26,32 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            z-index: 0; /* Behind the container */
+            z-index: 0;
             top: 0;
             left: 0;
         }
 
-        /* Fade-in and Slide-up Animation */
+        /* Navigation Bar Styles */
+        .navbar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 2;
+        }
+
+        .navbar a {
+            color: #66fcf1;
+            text-decoration: none;
+            margin-left: 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animation for Containers */
         @keyframes fadeInUp {
             0% {
                 opacity: 0;
@@ -79,19 +62,54 @@
                 transform: translateY(0);
             }
         }
+
+        /* Homepage Container Styles */
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(35, 40, 45, 0.8);
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            width: 320px;
+            max-width: 90%;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInUp 0.5s forwards ease-in-out;
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #66fcf1;
+            margin: 0;
+        }
+
+        p {
+            color: #c5c6c7;
+            max-width: 600px;
+            text-align: center;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </head>
 <body>
-    <div id="particles-js"></div> <!-- Particle animation container -->
+    <div id="particles-js"></div>
 
-    <div class="signin-signup">
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="home.html">Home</a>
+        <a href="about.html">About Us</a>
         <a href="login.html">Sign In</a>
-        <a href="register.html">register</a>
+        <a href="register.html">Sign Up</a>
     </div>
 
-    <div class="container">
-        <h1>Welcome</h1>
+    <!-- Homepage Container -->
+    <div id="homepage" class="container">
+        <h1>Welcome<br>To Our Company</h1>
         <p>Our system optimizes traffic signals to prioritize emergency vehicles, ensuring faster and safer routes for responders. Revolutionizing traffic management, one signal at a time.</p>
     </div>
 
@@ -99,88 +117,16 @@
         /* Initialize particles.js with blue and gray bubbles, no lines */
         particlesJS("particles-js", {
             particles: {
-                number: {
-                    value: 70,
-                    density: {
-                        enable: true,
-                        value_area: 800
-                    }
-                },
-                color: {
-                    value: ["#00aaff", "#c0c0c0"] /* Blue and light gray bubbles */
-                },
-                shape: {
-                    type: "circle",
-                    stroke: {
-                        width: 0,
-                        color: "#ffffff"
-                    }
-                },
-                opacity: {
-                    value: 0.6,
-                    random: true,
-                    anim: {
-                        enable: true,
-                        speed: 1,
-                        opacity_min: 0.2,
-                        sync: false
-                    }
-                },
-                size: {
-                    value: 4,
-                    random: true,
-                    anim: {
-                        enable: true,
-                        speed: 3,
-                        size_min: 0.5,
-                        sync: false
-                    }
-                },
-                line_linked: {
-                    enable: false /* Disable lines between bubbles */
-                },
-                move: {
-                    enable: true,
-                    speed: 2,
-                    direction: "none",
-                    random: true,
-                    straight: false,
-                    out_mode: "out",
-                    bounce: false,
-                    attract: {
-                        enable: false,
-                        rotateX: 600,
-                        rotateY: 1200
-                    }
-                }
+                number: { value: 70, density: { enable: true, value_area: 800 } },
+                color: { value: ["#00aaff", "#c0c0c0"] },
+                shape: { type: "circle", stroke: { width: 0, color: "#ffffff" } },
+                opacity: { value: 0.6, random: true, anim: { enable: true, speed: 1, opacity_min: 0.2, sync: false } },
+                size: { value: 4, random: true, anim: { enable: true, speed: 3, size_min: 0.5, sync: false } },
+                line_linked: { enable: false },
+                move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out", bounce: false }
             },
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: {
-                        enable: true,
-                        mode: "bubble" /* Particles will bubble up when hovered */
-                    },
-                    onclick: {
-                        enable: true,
-                        mode: "repulse" /* Particles will repulse on click */
-                    },
-                    resize: true
-                },
-                modes: {
-                    bubble: {
-                        distance: 200,
-                        size: 8,
-                        duration: 1,
-                        opacity: 0.8,
-                        speed: 3
-                    },
-                    repulse: {
-                        distance: 200,
-                        duration: 0.4
-                    }
-                }
-            },
+            interactivity: { detect_on: "canvas", events: { onhover: { enable: true, mode: "bubble" }, onclick: { enable: true, mode: "repulse" }, resize: true },
+            modes: { bubble: { distance: 200, size: 8, duration: 1, opacity: 0.8, speed: 3 }, repulse: { distance: 200, duration: 0.4 } } },
             retina_detect: true
         });
     </script>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Successful</title>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        /* Set the position and size for the particles container */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Set below the other content */
+        }
+        
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1f2833; /* Match homepage background color */
+            color: #c5c6c7;
+            text-align: center;
+        }
+
+        /* Container Styles */
+        .container {
+            background-color: rgba(35, 40, 45, 0.8); /* Semi-transparent background */
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInUp 0.5s forwards; /* Fade in animation */
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #66fcf1; /* Light blue for success message */
+        }
+
+        p {
+            font-size: 1.2em;
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+
+        a {
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #00aaff; /* Blue button color */
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* Fade-in and Slide-up Animation */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="container">
+        <h2>Registration Successful!</h2>
+        <p>Thank you for registering. <a href="login.html">Click here to login</a>.</p>
+    </div>
+
+    <script>
+        // Initialize particles.js with blue and gray bubbles, no lines
+        particlesJS("particles-js", {
+            particles: {
+                number: {
+                    value: 70,
+                    density: { enable: true, value_area: 800 }
+                },
+                color: { value: ["#00aaff", "#c0c0c0"] },
+                shape: { 
+                    type: "circle", 
+                    stroke: { width: 0, color: "#000000" } 
+                },
+                opacity: {
+                    value: 0.6,
+                    random: true,
+                    anim: { enable: true, speed: 1, opacity_min: 0.2, sync: false }
+                },
+                size: {
+                    value: 4,
+                    random: true,
+                    anim: { enable: true, speed: 3, size_min: 0.5, sync: false }
+                },
+                line_linked: { enable: false },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "bubble" },
+                    onclick: { enable: true, mode: "repulse" },
+                    resize: true
+                },
+                modes: {
+                    bubble: { distance: 200, size: 8, duration: 1, opacity: 0.8, speed: 3 },
+                    repulse: { distance: 200, duration: 0.4 }
+                }
+            },
+            retina_detect: true
+        });
+    </script>
+</body>
+</html>
